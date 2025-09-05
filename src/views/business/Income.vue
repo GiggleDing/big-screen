@@ -126,7 +126,7 @@ import { getPeriodData, getAccumulatedRevenue, getRevenueOfProvinceByMonth, getR
 use([CanvasRenderer, BarChart, LineChart, GaugeChart, TitleComponent, TooltipComponent, LegendComponent, GridComponent]);
 
 // 记得改回来
-const loaded = ref(false)
+const loaded = ref(true)
 const option1 = ref({
     grid: { left: '3%', right: '3%', bottom: '10%', containLabel: true },
     xAxis: { data: [] },
