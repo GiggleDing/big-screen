@@ -1,122 +1,108 @@
 <template>
-    <el-card v-bind="$attrs" :class="cardClass">
-        <template #header v-if="title || $slots.title">
-            <div class="card-header">
-                <component :is="titleTag" :class="titleClass" v-if="title">
-                    {{ title }}
-                </component>
-                <slot name="title" v-else></slot>
-                
-                <!-- 标题右侧额外内容 -->
-                <div class="card-header-extra" v-if="$slots.extra">
-                    <slot name="extra"></slot>
-                </div>
-            </div>
-        </template>
-        
-        <div class="card-content">
-            <slot></slot>
+    <div class="my-card">
+        <div class="card-header">
+            <span class="title-bar" :class="`bar${level}`"></span>
+            <component :is="tag" :class="`title${level}`">
+                {{ title }}
+            </component>
         </div>
-    </el-card>
+        <div class="card-content">
+            <slot />
+        </div>
+    </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
 
-// 定义 props
 const props = defineProps({
-    // 标题文本
-    title: {
-        type: String,
-        default: ''
-    },
-    // 标题级别 (1-3)
-    level: {
-        type: Number,
-        default: 1,
-        validator: (value) => [1, 2, 3].includes(value)
-    },
-    // 是否显示边框
-    shadow: {
-        type: String,
-        default: 'always',
-        validator: (value) => ['always', 'hover', 'never'].includes(value)
-    }
+    title: { type: String, required: true },
+    level: { type: Number, default: 1 }
 })
 
-// 计算标题标签
-const titleTag = computed(() => `h${props.level + 1}`) // h2, h3, h4
-
-// 计算标题样式类
-const titleClass = computed(() => {
-    const baseClass = 'card-title'
-    const levelClass = `card-title--level${props.level}`
-    return `${baseClass} ${levelClass}`
+const tag = computed(() => {
+    if (props.level === 1) return 'h1'
+    if (props.level === 2) return 'h2'
+    return 'h3'
 })
-
-// 计算卡片样式类
-const cardClass = computed(() => {
-    return `custom-card custom-card--level${props.level}`
-})
-</script>
-
-<script>
-export default {
-    name: 'CustomCard',
-    inheritAttrs: false
-}
 </script>
 
 <style scoped>
-.custom-card {
-    margin-bottom: 16px;
+.my-card {
+    background-color: var(--el-bg-color-overlay);
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: var(--el-box-shadow-light);
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
 }
 
 .card-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 8px;
+    padding-bottom: 10px;
+    margin: 0;
+    border-bottom: 1px solid var(--el-border-color-lighter);
 }
 
-.card-title {
-    margin: 0;
+.title-bar {
+    width: 4px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.bar1 {
+    background-color: var(--el-color-primary);
+    height: 1.4em;
+}
+
+.bar2 {
+    background-color: var(--el-color-success);
+    height: 1.2em;
+}
+
+.bar3 {
+    background-color: var(--el-color-danger);
+    height: 1em;
+}
+
+.title1 {
+    font-size: 18px;
     font-weight: 600;
     color: var(--el-text-color-primary);
+    margin: 0;
 }
 
-.card-title--level1 {
-    font-size: 20px;
-    line-height: 28px;
-}
-
-.card-title--level2 {
-    font-size: 18px;
-    line-height: 26px;
-}
-
-.card-title--level3 {
+.title2 {
     font-size: 16px;
-    line-height: 24px;
+    font-weight: 500;
+    color: var(--el-text-color-regular);
+    margin: 0;
 }
 
-.card-header-extra {
-    color: var(--el-text-color-regular);
+.title3 {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--el-text-color-secondary);
+    margin: 0;
 }
 
 .card-content {
-    color: var(--el-text-color-primary);
-}
-
-/* 不同级别卡片的样式变化 */
-.custom-card--level1 {
-    border-left: 4px solid var(--el-color-primary);
-}
-
-.custom-card--level2 {
-    border-left: 3px solid var(--el-color-primary-light-3);
-}
-
-.custom-card--level3 {
-    border-left: 2px solid var(--el-color-primary-light-5);
+    font-size: 14px;
+    color: var(--el-text-color-regular);
+    margin: 0;
+    padding: 5px;
+    flex: 1;
+    flex-direction: column;
+    width: 100%;
+    /* height: 100%; */
+    display: flex;
+    gap: 5px;
+    box-sizing: border-box;
 }
 </style>

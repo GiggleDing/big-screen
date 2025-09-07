@@ -1,24 +1,18 @@
 <template>
-    <div class="container">
-        <h2>1.2.2 完成率排名</h2>
-        <div class="charts-container">
-            <div class="chart-wrapper">
-                <h3>一类</h3>
-                <v-chart :option="option1" autoresize class="chart" />
-            </div>
-            <div class="chart-wrapper">
-                <h3>二类</h3>
-                <v-chart :option="option2" autoresize class="chart" />
-            </div>
-            <div class="chart-wrapper">
-                <h3>三类</h3>
-                <v-chart :option="option3" autoresize class="chart" />
-            </div>
-        </div>
-    </div>
-</template>
+    <MyCard style="width: 100%; height: 100%;" title="1.2.2 完成率排名" :level="1">
+        <MyCard v-loading="oneCategoryData.length === 0" style="width: 100%; height: 100%;" :level="2" title="一类">
+            <v-chart :option="option1" autoresize class="chart" />
+        </MyCard>
 
-<!-- TODO: 显示正在加载中 -->
+        <MyCard v-loading="twoCategoryData.length === 0" style="width: 100%; height: 100%;" :level="2" title="二类">
+            <v-chart :option="option2" autoresize class="chart" />
+        </MyCard>
+
+        <MyCard v-loading="threeCategoryData.length === 0" style="width: 100%; height: 100%;" :level="2" title="三类">
+            <v-chart :option="option3" autoresize class="chart" />
+        </MyCard>
+    </MyCard>
+</template>
 
 <script setup>
 import { ref, watch, computed } from 'vue'
@@ -27,6 +21,7 @@ import { BarChart, LineChart } from 'echarts/charts'
 import { GridComponent, LegendComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import VChart from 'vue-echarts'
+import MyCard from '@/components/MyCard.vue'
 
 use([GridComponent, LegendComponent, BarChart, LineChart, CanvasRenderer])
 
@@ -56,17 +51,8 @@ function buildOption(data) {
             data: sortedData.map(item => item.areaName)
         },
         yAxis: [
-            {
-                type: 'value',
-                name: '序时完成(万元)',
-                show: false
-            },
-            {
-                type: 'value',
-                name: '序时完成率',
-                position: 'right',
-                show: false
-            }
+            { type: 'value', name: '序时完成(万元)', show: false },
+            { type: 'value', name: '序时完成率', position: 'right', show: false }
         ],
         legend: {
             data: ['序时完成(万元)', '序时完成率'],
@@ -79,22 +65,14 @@ function buildOption(data) {
                 type: 'bar',
                 data: sortedData.map(item => Number(item.accumulatedRevenue)),
                 yAxisIndex: 0,
-                label: {
-                    show: true,
-                    position: 'top',
-                    formatter: '{c}'
-                }
+                label: { show: true, position: 'top', formatter: '{c}' }
             },
             {
                 name: '序时完成率',
                 type: 'line',
                 data: sortedData.map(item => Number(item.scheduleCompletion)),
                 yAxisIndex: 1,
-                label: {
-                    show: true,
-                    position: 'top',
-                    formatter: '{c}%'
-                }
+                label: { show: true, position: 'top', formatter: '{c}%' }
             }
         ]
     }
@@ -106,40 +84,17 @@ watch(threeCategoryData, (data) => { option3.value = buildOption(data) }, { imme
 </script>
 
 <style scoped>
-.container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-}
-
-.container > h2 {
-    width: 100%;
-    margin: 0;
-    padding: 8px 0;
-}
-
-.charts-container {
-    flex: 1; /* 占据剩余高度 */
-    display: flex;
-    flex-direction: column;
-    gap: 8px; /* 每个图表间距 */
-}
-
-.chart-wrapper {
-    flex: 1; /* 三个图表平分剩余高度 */
-    display: flex;
-    flex-direction: column;
-}
-
-.chart-wrapper h3 {
-    margin: 0;
-    padding: 4px 0;
-    text-align: left;
-}
-
 .chart {
     width: 100%;
-    height: 100%;
+    height: 12vh;
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 12vh;
+    color: #1890ff;
+    font-weight: bold;
 }
 </style>

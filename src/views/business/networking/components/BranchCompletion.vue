@@ -1,42 +1,6 @@
-<template>
-  <el-card class="card">
-    <template #header>
-      <div class="card-header">
-        <span>1.2.1 分公司完成情况</span>
-      </div>
-    </template>
-    <div class="table-wrapper">
-      <el-table
-        :data="tableData"
-        size="small"
-        stripe
-        v-loading="tableData.length === 0"
-        style="width: 100%; flex: 1"
-        :max-height="tableHeight"
-      >
-        <el-table-column
-          v-for="col in tableColumns"
-          :key="col.prop"
-          :prop="col.prop"
-          :label="col.label"
-          align="center"
-        />
-        <el-table-column prop="monthlyTrend" label="分月趋势" :width="200" align="center">
-          <template #default="scope">
-            <v-chart
-              style="height: 50px;"
-              autoresize
-              ref="chartRef"
-              :option="getTrendOption(scope.row.monthlyTrend)"
-            />
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-  </el-card>
-</template>
-
 <script setup>
+import MyCard from '@/components/MyCard.vue'
+
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { defineProps } from 'vue'
 import { use } from 'echarts/core'
@@ -46,10 +10,10 @@ import { GridComponent } from 'echarts/components'
 import VChart from 'vue-echarts'
 
 const props = defineProps({
-  tableData: {
-    type: Array,
-    required: true
-  }
+    tableData: {
+        type: Array,
+        required: true
+    }
 })
 
 const tableColumns = [
@@ -73,36 +37,17 @@ const getTrendOption = (monthlyTrend) => ({
   series: [{ type: 'line', data: Object.values(monthlyTrend || {}) }]
 })
 
-// 自适应表格高度
-const tableHeight = ref(0)
-const calculateHeight = () => {
-  const card = document.querySelector('.card')
-  if (card) {
-    const headerHeight = card.querySelector('.card-header')?.offsetHeight || 40
-    tableHeight.value = card.offsetHeight - headerHeight - 20 // 20px padding
-  }
-}
-
-onMounted(() => {
-  calculateHeight()
-  window.addEventListener('resize', calculateHeight)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', calculateHeight)
-})
 </script>
 
-<style scoped>
-.card {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.table-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-</style>
+<template>
+    <MyCard style="width: 100%; height: 100%;" :level="1" title="1.2.1 分公司完成情况">
+        <el-table stripe fit size="small" style="width: 100%; height: 100%;" :data="tableData" v-loading="tableData.length === 0">
+            <el-table-column v-for="col in tableColumns" :key="col.prop" :prop="col.prop" :label="col.label" align="center" min-width="50" show-overflow-tooltip />
+            <el-table-column prop="monthlyTrend" label="分月趋势" align="center">
+                <template #default="scope">
+                    <v-chart style="height: 20%;" autoresize ref="chartRef" :option="getTrendOption(scope.row.monthlyTrend)" />
+                </template>
+            </el-table-column>
+        </el-table>
+    </MyCard>
+</template>

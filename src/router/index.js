@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/business/Home.vue'
-import Income from '@/views/business/income/Index.vue'
+import Income from '@/views/business/Income.vue'
 import Test from '@/views/business/Test.vue'
 import Networking from '@/views/business/networking/Index.vue'
 

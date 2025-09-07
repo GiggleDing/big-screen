@@ -28,6 +28,10 @@ const handleClick = () => {
                     <el-icon><Flag /></el-icon>
                     <span>收入分析</span>
                 </el-menu-item>
+                <el-menu-item index="/business/networking">
+                    <el-icon><Flag /></el-icon>
+                    <span>联网通信主营出账收入</span>
+                </el-menu-item>
             </el-menu>
         </el-drawer>
         <div style="height: 100%;">

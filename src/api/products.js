@@ -35,3 +35,15 @@ export function getAccumulatedRevenue(monthId, areaId, options = {}) {
         }
     })
 }
+
+
+export function getRevenueOfNetworking(monthId, areaId, options = {}) {
+    const { profession } = options
+    return request.get('/getRevenueOfNetworking', {
+        params: {
+            monthId,
+            areaId,
+            ...(profession? { profession } : {})
+        }
+    })
+}

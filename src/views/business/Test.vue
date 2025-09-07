@@ -1,83 +1,72 @@
-<template>
-    <div class="demo-container">
-        <MyCard title="销售数据趋势" :level="1">
-            <v-chart class="chart" :option="chartOption" autoresize />
-        </MyCard>
-    </div>
-</template>
+<script setup lang="ts">
+import MyCard from '@/components/MyCard.vue';
 
-<script setup>
-import { ref } from 'vue'
-import { use } from 'echarts/core'
-import { LineChart } from 'echarts/charts'
+import { use } from "echarts/core";
+import { CanvasRenderer } from "echarts/renderers";
+import { PieChart } from "echarts/charts";
 import {
   TitleComponent,
   TooltipComponent,
   LegendComponent,
-  GridComponent
-} from 'echarts/components'
-import { CanvasRenderer } from 'echarts/renderers'
-import VChart from 'vue-echarts'
-import MyCard from '@/components/MyCard.vue'
+} from "echarts/components";
+import VChart, { THEME_KEY } from "vue-echarts";
+import { ref, provide } from "vue";
 
-// 注册 ECharts 组件
 use([
-  LineChart,
+  CanvasRenderer,
+  PieChart,
   TitleComponent,
   TooltipComponent,
   LegendComponent,
-  GridComponent,
-  CanvasRenderer
-])
+]);
 
-// 图表配置
-const chartOption = ref({
+provide(THEME_KEY, "dark");
+
+const option = ref({
+  title: {
+    text: "Traffic Sources",
+    left: "center",
+  },
   tooltip: {
-    trigger: 'axis'
+    trigger: "item",
+    formatter: "{a} <br/>{b} : {c} ({d}%)",
   },
   legend: {
-    data: ['销量', '利润']
-  },
-  grid: {
-    left: '10px',
-    right: '10px',
-    bottom: '10px',
-    top: '40px',
-    containLabel: true
-  },
-  xAxis: {
-    type: 'category',
-    data: ['1月', '2月', '3月', '4月', '5月', '6月']
-  },
-  yAxis: {
-    type: 'value'
+    orient: "vertical",
+    left: "left",
+    data: ["Direct", "Email", "Ad Networks", "Video Ads", "Search Engines"],
   },
   series: [
     {
-      name: '销量',
-      type: 'line',
-      data: [120, 200, 150, 80, 70, 110],
-      smooth: true,
-      itemStyle: {
-        color: '#409EFF'
-      }
+      name: "Traffic Sources",
+      type: "pie",
+      radius: "55%",
+      center: ["50%", "60%"],
+      data: [
+        { value: 335, name: "Direct" },
+        { value: 310, name: "Email" },
+        { value: 234, name: "Ad Networks" },
+        { value: 135, name: "Video Ads" },
+        { value: 1548, name: "Search Engines" },
+      ],
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: "rgba(0, 0, 0, 0.5)",
+        },
+      },
     },
-    {
-      name: '利润',
-      type: 'line',
-      data: [80, 120, 100, 60, 50, 80],
-      smooth: true,
-      itemStyle: {
-        color: '#67C23A'
-      }
-    }
-  ]
-})
+  ],
+});
 </script>
 
-<style scoped>
-.chart {
-  height: 40vh; /* 视口高度的40% */
-  width: 100%;
-}
-</style>
+<template>
+	<div style="width: 50%; height: 50%;">
+		<MyCard style="width: 100%; height: 100%;" title="我是个 1 级标题" :level="1">
+			<MyCard style="width: 100%; height: 100%;" title="我是个 2 级标题" :level="2">
+				<v-chart style="width: 100%; height: 100%;" :option="option" />
+			</MyCard>
+		</MyCard>
+	</div>
+</template>
