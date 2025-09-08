@@ -33,14 +33,13 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref, computed, watch } from 'vue'
 import BranchCompletion from './components/BranchCompletion.vue'
 import CompletionRateRanking from './components/CompletionRateRanking.vue'
 import YoyRanking from './components/YoyRanking.vue'
 import IncomeOfNetworking from './components/IncomeOfNetworking.vue'
 import { getRevenueOfNetworking } from '@/api/products'
 
-// 默认值为“联网通信”
 const value = ref('networking')
 
 const options = [
@@ -58,9 +57,9 @@ const fetchData = async (selectedValue) => {
         if (selectedValue === 'networking') {
             res = await getRevenueOfNetworking(202507, 'root')
         } else if (selectedValue === 'networkingOfPublic') {
-            res = await getRevenueOfNetworking(202507, 'root', { business: 'public' })
+            res = await getRevenueOfNetworking(202507, 'root', { profession: 'public' })
         } else if (selectedValue === 'networkingOfEnterprise') {
-            res = await getRevenueOfNetworking(202507, 'root', { business: 'enterprise' })
+            res = await getRevenueOfNetworking(202507, 'root', { profession: 'enterprise' })
         }
         branchData.value = res.data
     } catch (e) {
@@ -68,10 +67,10 @@ const fetchData = async (selectedValue) => {
     }
 }
 
-// 处理 select 变化
-const handleSelectChange = (val) => {
-    fetchData(val)
-}
+// 监听 value 变化，自动调用接口
+watch(value, (newVal) => {
+    fetchData(newVal)
+})
 
 // 页面加载时默认请求“联网通信”
 onMounted(() => {
