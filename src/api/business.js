@@ -1,4 +1,4 @@
-import request from "@/utils/request"
+import request from "../utils/request"
 
 export function getRevenueOfProvinceByMonth(yearId, areaCode, options = {}) {
     const { profession, business } = options
@@ -36,6 +36,16 @@ export function getAccumulatedRevenue(monthId, areaId, options = {}) {
     })
 }
 
+export function getRevenue(monthId, areaId, options = {}) {
+    const { profession } = options
+    return request.get('/getRevenue', {
+        params: {
+            monthId,
+            areaId,
+            ...areaId(profession? { profession }: {})
+        }
+    })
+}
 
 export function getRevenueOfNetworking(monthId, areaId, options = {}) {
     const { profession } = options
@@ -45,5 +55,11 @@ export function getRevenueOfNetworking(monthId, areaId, options = {}) {
             areaId,
             ...(profession? { profession } : {})
         }
+    })
+}
+
+export function getRevenueOfDigitalIntelligence(monthId, areaId) {
+    return request.get('/getRevenueOfDigitalIntelligence', {
+        params: { monthId, areaId }
     })
 }

@@ -1,5 +1,22 @@
-<script setup lang="ts">
-import MyCard from '@/components/MyCard.vue';
+<template>
+    <BaseScreen>
+        <template #header-center>
+            <h2>我是标题</h2>
+        </template>
+
+        <template #header-right>
+            <el-button>右侧按钮</el-button>
+            <el-button>右侧按钮1</el-button>
+        </template>
+
+        <template #main>
+            <v-chart class="chart" :option="option" />
+        </template>
+    </BaseScreen>
+</template>
+
+<script setup>
+import BaseScreen from '../../components/BaseScreen.vue'
 
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
@@ -60,13 +77,3 @@ const option = ref({
   ],
 });
 </script>
-
-<template>
-	<div style="width: 50%; height: 50%;">
-		<MyCard style="width: 100%; height: 100%;" title="我是个 1 级标题" :level="1">
-			<MyCard style="width: 100%; height: 100%;" title="我是个 2 级标题" :level="2">
-				<v-chart style="width: 100%; height: 100%;" :option="option" />
-			</MyCard>
-		</MyCard>
-	</div>
-</template>
