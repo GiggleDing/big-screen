@@ -2,9 +2,12 @@
     <el-container style="width: 100%; height: 100%;">
         <el-header style="height: 6%; display: flex; align-items: center; position: relative;">
             <div>
-                <el-button size="large" @click=handleClick plain>
-                    <el-icon><Operation /></el-icon>
-                </el-button>
+                <a-space>
+                    <el-button size="large" @click=handleClick plain>
+                        <el-icon><Operation /></el-icon>
+                    </el-button>
+                    {{ current_time }}
+                </a-space>
             </div>
             <div style="position: absolute; left: 50%; transform: translateX(-50%);">
                 <slot name="header-center"></slot>
@@ -33,10 +36,25 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import dayjs from 'dayjs'
 
 const drawer = ref(false)
 const handleClick = () => {
     drawer.value = true
 }
+
+const current_time = ref(dayjs().format("YYYY-MM-DD HH:mm:ss"))
+
+let timer = null
+
+onMounted(() => {
+    timer = setInterval(() => {
+        current_time.value = dayjs().format('YYYY-MM-DD HH:mm:ss')
+    }, 1000)
+})
+
+onBeforeUnmount(() => {
+    clearInterval(timer)
+})
 </script>
