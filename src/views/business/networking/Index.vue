@@ -54,7 +54,6 @@
 import { useDateStore } from '../../../stores/useDateStore'
 import { ref, computed } from 'vue'
 import BaseScreen from '../../../components/BaseScreen.vue'
-import MyCard from '../../../components/MyCard.vue'
 import BranchCompletion from './components/BranchCompletion.vue'
 import CompletionRateRanking from './components/CompletionRateRanking.vue'
 import YoyRanking from './components/YoyRanking.vue'

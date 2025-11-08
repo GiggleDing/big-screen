@@ -63,3 +63,9 @@ export function getRevenueOfDigitalIntelligence(monthId, areaId) {
         params: { monthId, areaId }
     })
 }
+
+export function getDevOfMobile(monthId, areaId) {
+    return request.get('/getDevOfMobile', {
+        params: { monthId, areaId }
+    })
+}

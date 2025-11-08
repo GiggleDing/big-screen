@@ -3,6 +3,7 @@ import Home from '../views/business/Home.vue'
 import Income from '../views/business/income/Index.vue'
 import Test from '../views/business/Test.vue'
 import Networking from '../views/business/networking/Index.vue'
+import Dev from '../views/business/dev/Index.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,6 +23,10 @@ const router = createRouter({
                 {
                     path: 'networking',
                     component: Networking
+                },
+                {
+                    path: 'dev',
+                    component: Dev
                 }
             ]
         },
